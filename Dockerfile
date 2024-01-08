@@ -6,12 +6,12 @@ WORKDIR /app
 
 #* ===================== Stage 2: 🏗️ Build =============
 RUN git clone https://github.com/SergioRibera/cargo-pkgbuild -b dev /app && \
-    cargo build --release
+    cargo build --release --target x86_64-unknown-linux-musl
 
 #* ===================== Stage 3: ✅ Runtime =====================
 FROM archlinux:latest AS runtime
 # copy binary
-COPY --from=builder /app/target/release/cargo-aur /
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /
 
 # Install dependencies
 RUN pacman --needed --noconfirm -Syu \

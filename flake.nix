@@ -42,6 +42,11 @@
             shellcheck.enable = true;
             yamllint.enable = true;
           };
+          settings = {
+            yamllint = {
+              configPath = "./.github/linters/.yaml-lint.yml";
+            };
+          };
         };
 
         devShell = pkgs.mkShell {

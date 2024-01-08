@@ -39,6 +39,7 @@
           hooks = {
             alejandra.enable = true;
             editorconfig-checker.enable = true;
+            shfmt.enable = true;
             shellcheck.enable = true;
             yamllint.enable = true;
           };

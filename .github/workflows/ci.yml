@@ -46,11 +46,14 @@ jobs:
 
       - name: Run the Container
         id: run
-        env:
-          INPUT_WHO_TO_GREET: Mona Lisa Octocat
         run: |
           docker run \
-            --env INPUT_WHO_TO_GREET="${{ env.INPUT_WHO_TO_GREET }}" \
+            -v "$(pwd):/github/workspace" \
+            -w "/github/workspace" \
+            --env INPUT_SSH_PRIVATE_KEY="${{ secrets.GITHUB_TOKEN }}" \
+            --env INPUT_GITHUB_TOKEN="" \
+            --env INPUT_PROYECT_PATH="test_proyect" \
+            --env INPUT_PUBLISH="false" \
             --rm ${{ env.TEST_TAG }}
 
   test-action:
@@ -66,8 +69,12 @@ jobs:
         id: test-action
         uses: ./
         with:
-          who-to-greet: Mona Lisa Octocat
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ssh_private_key: ""
+          proyect_path: test_proyect
+          publish: false
 
+      - name: Print Output File
+        run: echo "${{ steps.test-action.outputs.file }}"
       - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: echo "${{ steps.test-action.outputs.pkgbuild }}"

@@ -1,0 +1,12 @@
+[package]
+name = "test_proyect"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[package.metadata.aur]
+package_name="test_proyect"
+source_download="https://test.com/download/{{version}}/linux/x86_64"
+depends = ["some", "dep"]
+optdepends = ["optional", "dep"]

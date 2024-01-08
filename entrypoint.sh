@@ -12,12 +12,12 @@ export HOME=/home/builder
 
 echo "::group::Generating PKGBUILD"
 echo "Generating PKGBUILD"
-CARGO_PKG_COMMAND="b"
+CARGO_PKG_COMMAND="build"
 if [[ -n ${INPUT_FILE} ]]; then
   CARGO_PKG_COMMAND="generate ${INPUT_FILE}"
 fi
 if [[ ${INPUT_MUSL} == "true" ]]; then
-  CARGO_PKG_COMMAND="b --musl"
+  CARGO_PKG_COMMAND="build --musl"
 fi
 ORIGIN_DIR=$(pwd)
 cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"

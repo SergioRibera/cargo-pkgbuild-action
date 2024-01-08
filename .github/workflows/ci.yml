@@ -51,16 +51,16 @@ jobs:
             -v "$(pwd):/github/workspace" \
             -w "/github/workspace" \
             --env GITHUB_REF="$GITHUB_REF" \
-            --env INPUT_SSH_PRIVATE_KEY="${{ secrets.GITHUB_TOKEN }}" \
-            --env INPUT_GITHUB_TOKEN="" \
-            --env INPUT_PROYECT_PATH="test_proyect" \
-            --env INPUT_PUBLISH="false" \
+            --env INPUT_GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            --env INPUT_GITHUB_USERNAME="AUR Release Action" \
+            --env INPUT_GIT_EMAIL="github-action-bot@no-reply.com" \
             --env INPUT_MUSL="false" \
             --env INPUT_FILE="" \
             --env INPUT_OUTPUT="out" \
+            --env INPUT_PUBLISH="false" \
             --env INPUT_PACKAGE_NAME="test_proyect" \
-            --env INPUT_GITHUB_USERNAME="AUR Release Action" \
-            --env INPUT_GIT_EMAIL="github-action-bot@no-reply.com" \
+            --env INPUT_PROYECT_PATH="test_proyect" \
+            --env INPUT_SSH_PRIVATE_KEY="" \
             --env INPUT_TEST_PKGBUILT="true" \
             --env INPUT_COMMIT_MESSAGE="Bump %FILENAME% to %VERSION%" \
             --rm ${{ env.TEST_TAG }}

@@ -1,11 +1,26 @@
-# Set the base image to use for subsequent instructions
-FROM alpine:3.19
+# Using the `rust-musl-builder` as base image, instead of 
+# the official Rust toolchain
+#* ================== Stage 1: 🦀 Recipe =======================
+FROM clux/muslrust:stable AS chef
+USER root
+RUN cargo install cargo-chef
+WORKDIR /app
 
-# Set the working directory inside the container
-WORKDIR /usr/src
+#* ===================== Stage 2: 🔨 Cache =============
+FROM chef AS planner
+RUN git clone --depth 1 https://github.com/SergioRibera/cargo-pkgbuild -b dev /app
+RUN cargo chef prepare --recipe-path recipe.json
 
-# Copy any source file(s) required for the action
-COPY entrypoint.sh .
+FROM chef AS builder
+COPY --from=planner /app/recipe.json recipe.json
+# Notice that we are specifying the --target flag!
+RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path recipe.json
 
-# Configure the container to be run as an executable
-ENTRYPOINT ["/usr/src/entrypoint.sh"]
+#* ===================== Stage 3: 🏗️ Build =============
+COPY . .
+RUN cargo build --release --target x86_64-unknown-linux-musl
+
+#* ===================== Stage 4: ✅ Runtime =====================
+FROM alpine AS runtime
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /usr/local/bin/
+ENTRYPOINT ["/usr/local/bin/cargo-aur"]

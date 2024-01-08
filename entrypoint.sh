@@ -2,7 +2,8 @@
 
 set -o errexit -o pipefail -o nounset
 
-source /utils.sh
+# shellcheck source=/dev/null
+source "/utils.sh"
 
 NEW_RELEASE=${GITHUB_REF##*/v}
 NEW_RELEASE=${NEW_RELEASE##*/}
@@ -18,7 +19,9 @@ fi
 if [[ "${INPUT_MUSL}" == "true" ]]; then
   CARGO_PKG_COMMAND="b --musl"
 fi
-/cargo-aur -o "$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
+ORIGIN_DIR=$(pwd)
+cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
+cd "$ORIGIN_DIR"
 echo "file=$INPUT_OUTPUT/$(find "$INPUT_OUTPUT/*.tar.gz" | head -n1)">>"$GITHUB_OUTPUT"
 echo "pkgbuild=$INPUT_OUTPUT/PKGBUILD">>"$GITHUB_OUTPUT"
 echo "::endgroup::Generating PKGBUILD"

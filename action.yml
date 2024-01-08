@@ -7,6 +7,9 @@ branding:
 
 inputs:
   # cargo-aur options
+  proyect_path:
+    description: The project path to generate PKGBUILD
+    default: '.'
   musl:
     description: Build the binary as musl
     default: 'false'

@@ -8,8 +8,8 @@ WORKDIR /app
 
 #* ===================== Stage 2: 🔨 Cache =============
 FROM chef AS planner
-RUN git clone --depth 1 https://github.com/SergioRibera/cargo-pkgbuild -b dev /app
-RUN cargo chef prepare --recipe-path recipe.json
+RUN git clone --depth 1 https://github.com/SergioRibera/cargo-pkgbuild -b dev /app && \
+    cargo chef prepare --recipe-path recipe.json
 
 FROM chef AS builder
 COPY --from=planner /app/recipe.json recipe.json
@@ -22,5 +22,7 @@ RUN cargo build --release --target x86_64-unknown-linux-musl
 
 #* ===================== Stage 4: ✅ Runtime =====================
 FROM alpine AS runtime
-COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /usr/local/bin/
-ENTRYPOINT ["/usr/local/bin/cargo-aur"]
+WORKDIR /app
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /app/
+COPY entrypoint.sh .
+ENTRYPOINT ["/usr/src/entrypoint.sh"]

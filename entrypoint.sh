@@ -13,17 +13,17 @@ export HOME=/home/builder
 echo "::group::Generating PKGBUILD"
 echo "Generating PKGBUILD"
 CARGO_PKG_COMMAND="b"
-if [[ -n "${INPUT_FILE}" ]]; then
+if [[ -n ${INPUT_FILE} ]]; then
   CARGO_PKG_COMMAND="generate ${INPUT_FILE}"
 fi
-if [[ "${INPUT_MUSL}" == "true" ]]; then
+if [[ ${INPUT_MUSL} == "true" ]]; then
   CARGO_PKG_COMMAND="b --musl"
 fi
 ORIGIN_DIR=$(pwd)
 cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
 cd "$ORIGIN_DIR"
-echo "file=$INPUT_OUTPUT/$(find "$INPUT_OUTPUT/*.tar.gz" | head -n1)">>"$GITHUB_OUTPUT"
-echo "pkgbuild=$INPUT_OUTPUT/PKGBUILD">>"$GITHUB_OUTPUT"
+echo "file=$INPUT_OUTPUT/$(find "$INPUT_OUTPUT/*.tar.gz" | head -n1)" >>"$GITHUB_OUTPUT"
+echo "pkgbuild=$INPUT_OUTPUT/PKGBUILD" >>"$GITHUB_OUTPUT"
 echo "::endgroup::Generating PKGBUILD"
 
 echo "::group::Setup"
@@ -72,14 +72,14 @@ makepkg --printsrcinfo >.SRCINFO
 echo "The new .SRCINFO is:"
 cat .SRCINFO
 
-if [[ "${INPUT_TEST_PKGBUILD}" == "true" ]]; then
+if [[ ${INPUT_TEST_PKGBUILD} == "true" ]]; then
   echo "::group::Build::Install"
   echo "Try building the package"
   makepkg --syncdeps --noconfirm --cleanbuild --rmdeps --install
   echo "::endgroup::Build::Install"
 fi
 
-if [[ "$INPUT_PUBLISH" == "true" ]]; then
+if [[ $INPUT_PUBLISH == "true" ]]; then
   echo "Clone the AUR repo [${REPO_URL}]"
   git clone "$REPO_URL"
 
@@ -96,6 +96,6 @@ if [[ "$INPUT_PUBLISH" == "true" ]]; then
   commit "$(generate_commit_message "" "$NEW_RELEASE")"
   git push
 else
-echo "::endgroup::Build"
-echo "::group::Commit"
+  echo "::endgroup::Build"
+  echo "::group::Commit"
 fi

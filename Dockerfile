@@ -21,8 +21,39 @@ COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 #* ===================== Stage 4: ✅ Runtime =====================
-FROM alpine AS runtime
-WORKDIR /app
-COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /app/
-COPY entrypoint.sh .
-ENTRYPOINT ["/usr/src/entrypoint.sh"]
+FROM archlinux:latest AS runtime
+# copy binary
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /
+
+# Install dependencies
+RUN pacman --needed --noconfirm -Syu \
+    base \
+    base-devel \
+    git \
+    pacman-contrib \
+    openssh
+
+# Create non-root user
+RUN useradd -m builder && \
+    echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    usermod -a -G wheel builder
+
+# Make ssh directory for non-root user and add known_hosts
+RUN mkdir -p /home/builder/.ssh && \
+    touch /home/builder/.ssh/known_hosts
+
+# Copy ssh_config
+COPY ssh_config /home/builder/.ssh/config
+
+# Set permissions
+RUN chown -R builder:builder /home/builder/.ssh && \
+    chmod 600 /home/builder/.ssh/* -R
+
+COPY entrypoint.sh cred-helper.sh utils.sh /
+
+# Switch to non-root user and set workdir
+USER builder
+WORKDIR /home/builder
+
+ENTRYPOINT ["/entrypoint.sh"]

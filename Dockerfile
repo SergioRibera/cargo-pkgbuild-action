@@ -20,7 +20,8 @@ RUN pacman --needed --noconfirm -Syu \
     openssh
 
 # Create non-root user
-RUN useradd -m builder && \
+RUN groupadd --gid 1001 builder && \
+    useradd --uid 1001 --gid 1001 -m builder && \
     echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     usermod -a -G wheel builder

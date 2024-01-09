@@ -35,8 +35,7 @@ COPY ssh_config /home/builder/.ssh/config
 
 # Set permissions
 RUN chown -R builder:builder /home/builder/.ssh && \
-    chmod 600 /home/builder/.ssh/* -R && \
-    chmod 600 /home/builder/.cargo/* -R
+    chmod 600 /home/builder/.ssh/* -R
 
 COPY entrypoint.sh cred-helper.sh utils.sh /
 

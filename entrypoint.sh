@@ -8,7 +8,7 @@ source "/utils.sh"
 NEW_RELEASE=${GITHUB_REF##*/v}
 NEW_RELEASE=${NEW_RELEASE##*/}
 
-export HOME=/home/builder
+export HOME=/root
 
 echo "::group::Generating PKGBUILD"
 echo "Generating PKGBUILD"

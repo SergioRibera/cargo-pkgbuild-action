@@ -19,13 +19,27 @@ RUN pacman --needed --noconfirm -Syu \
     git \
     openssh
 
+# Create non-root user
+RUN useradd -m builder && \
+    echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    usermod -a -G wheel builder
+
 # Make ssh directory for non-root user and add known_hosts
-RUN mkdir -p /root/.ssh && \
-    touch /root/.ssh/known_hosts
+RUN mkdir -p /home/builder/.ssh && mkdir -p /home/builder/.cargo && \
+    touch /home/builder/.ssh/known_hosts
 
 # Copy ssh_config
-COPY ssh_config /root/.ssh/config
+COPY ssh_config /home/builder/.ssh/config
+
+# Set permissions
+RUN chown -R builder:builder /home/builder/.ssh && \
+    chmod 600 /home/builder/.ssh/* -R
 
 COPY entrypoint.sh cred-helper.sh utils.sh /
+
+# Switch to non-root user and set workdir
+USER builder
+WORKDIR /home/builder
 
 ENTRYPOINT ["/entrypoint.sh"]

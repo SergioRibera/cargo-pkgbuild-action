@@ -52,7 +52,7 @@ jobs:
             -w "/github/workspace" \
             --env GITHUB_REF="$GITHUB_REF" \
             --env INPUT_GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
-            --env INPUT_GITHUB_USERNAME="AUR Release Action" \
+            --env INPUT_GIT_USERNAME="AUR Release Action" \
             --env INPUT_GIT_EMAIL="github-action-bot@no-reply.com" \
             --env INPUT_MUSL="false" \
             --env INPUT_FILE="" \
@@ -61,7 +61,7 @@ jobs:
             --env INPUT_PACKAGE_NAME="test_proyect" \
             --env INPUT_PROYECT_PATH="test_proyect" \
             --env INPUT_SSH_PRIVATE_KEY="" \
-            --env INPUT_TEST_PKGBUILT="true" \
+            --env INPUT_TEST_PKGBUILT="false" \
             --env INPUT_COMMIT_MESSAGE="Bump %FILENAME% to %VERSION%" \
             --rm ${{ env.TEST_TAG }}
 
@@ -82,6 +82,7 @@ jobs:
           ssh_private_key: ""
           proyect_path: test_proyect
           publish: false
+          test_pkgbuild: false
 
       - name: Print Output File
         run: echo "${{ steps.test-action.outputs.file }}"

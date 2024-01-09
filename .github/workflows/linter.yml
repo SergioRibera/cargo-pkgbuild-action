@@ -29,5 +29,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_RUBY: false
-          MARKDOWN_CONFIG_FILE: .mdlrc
+          # MARKDOWN_CONFIG_FILE: .mdlrc
           MARKDOWN_CUSTOM_RULE_GLOBS: .github/linters/**.rb

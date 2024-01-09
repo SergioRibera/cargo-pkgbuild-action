@@ -20,9 +20,10 @@ if [[ ${INPUT_MUSL} == "true" ]]; then
   CARGO_PKG_COMMAND="build --musl"
 fi
 ORIGIN_DIR=$(pwd)
-cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
+cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$ORIGIN_DIR/$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
 cd "$ORIGIN_DIR"
-echo "file=$INPUT_OUTPUT/$(find "$INPUT_OUTPUT/*.tar.gz" | head -n1)" >>"$GITHUB_OUTPUT"
+OUTPUT_FILE=$(find "$INPUT_OUTPUT" -name "*.tar.gz" | head -n1)
+echo "file=$INPUT_OUTPUT/$OUTPUT_FILE" >>"$GITHUB_OUTPUT"
 echo "pkgbuild=$INPUT_OUTPUT/PKGBUILD" >>"$GITHUB_OUTPUT"
 echo "::endgroup::Generating PKGBUILD"
 

@@ -1,7 +1,12 @@
 [package]
 name = "test_proyect"
+description = "Test Description"
+homepage = "https://github.com/SergioRibera/cargo-pkgbuild-action"
+repository = "https://github.com/SergioRibera/cargo-pkgbuild-action"
+authors = ["SergioRibera"]
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 
 [dependencies]
 

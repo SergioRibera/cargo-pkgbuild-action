@@ -15,6 +15,7 @@ COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cargo-aur /
 
 # Install dependencies
 RUN pacman --needed --noconfirm -Syu \
+    cargo \
     base-devel \
     git \
     openssh
@@ -26,7 +27,7 @@ RUN useradd -m builder && \
     usermod -a -G wheel builder
 
 # Make ssh directory for non-root user and add known_hosts
-RUN mkdir -p /home/builder/.ssh && \
+RUN mkdir -p /home/builder/.ssh && mkdir -p /home/builder/.cargo && \
     touch /home/builder/.ssh/known_hosts
 
 # Copy ssh_config
@@ -34,7 +35,8 @@ COPY ssh_config /home/builder/.ssh/config
 
 # Set permissions
 RUN chown -R builder:builder /home/builder/.ssh && \
-    chmod 600 /home/builder/.ssh/* -R
+    chmod 600 /home/builder/.ssh/* -R && \
+    chmod 600 /home/builder/.cargo/* -R
 
 COPY entrypoint.sh cred-helper.sh utils.sh /
 

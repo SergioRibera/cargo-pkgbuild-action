@@ -23,7 +23,7 @@ fi
 cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$ORIGIN_DIR/$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
 cd "$ORIGIN_DIR"
 OUTPUT_FILE=$(find "$INPUT_OUTPUT" -name "*.tar.gz" | head -n1)
-echo "file=$INPUT_OUTPUT/$OUTPUT_FILE" >>"$GITHUB_OUTPUT"
+echo "file=$OUTPUT_FILE" >>"$GITHUB_OUTPUT"
 echo "pkgbuild=$INPUT_OUTPUT/PKGBUILD" >>"$GITHUB_OUTPUT"
 echo "::endgroup::Generating PKGBUILD"
 

@@ -51,6 +51,7 @@ jobs:
             -v "$(pwd):/github/workspace" \
             -w "/github/workspace" \
             --env GITHUB_REF="$GITHUB_REF" \
+            --env GITHUB_OUTPUT="/dev/null" \
             --env INPUT_GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
             --env INPUT_GIT_USERNAME="AUR Release Action" \
             --env INPUT_GIT_EMAIL="github-action-bot@no-reply.com" \

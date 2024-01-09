@@ -40,6 +40,5 @@ COPY entrypoint.sh cred-helper.sh utils.sh /
 
 # Switch to non-root user and set workdir
 USER builder
-WORKDIR /home/builder
 
 ENTRYPOINT ["/entrypoint.sh"]

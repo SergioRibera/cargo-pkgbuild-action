@@ -7,8 +7,9 @@ source "/utils.sh"
 
 NEW_RELEASE=${GITHUB_REF##*/v}
 NEW_RELEASE=${NEW_RELEASE##*/}
+ORIGIN_DIR=$(pwd)
 
-export HOME=/root
+export HOME=/home/builder
 
 echo "::group::Generating PKGBUILD"
 echo "Generating PKGBUILD"
@@ -19,7 +20,6 @@ fi
 if [[ ${INPUT_MUSL} == "true" ]]; then
   CARGO_PKG_COMMAND="build --musl"
 fi
-ORIGIN_DIR=$(pwd)
 cd "$INPUT_PROYECT_PATH" && /cargo-aur -o "$ORIGIN_DIR/$INPUT_OUTPUT" "$CARGO_PKG_COMMAND"
 cd "$ORIGIN_DIR"
 OUTPUT_FILE=$(find "$INPUT_OUTPUT" -name "*.tar.gz" | head -n1)
@@ -53,13 +53,13 @@ sudo git config --global --add safe.directory /github/workspace
 REPO_URL="ssh://aur@aur.archlinux.org/${INPUT_PACKAGE_NAME}.git"
 
 # Make the working directory
-mkdir -p $HOME/package
+mkdir -p "$HOME/package"
 
 # Copy the PKGBUILD file into the working directory
-cp "$INPUT_OUTPUT/PKGBUILD" $HOME/PKGBUILD
+cp "$ORIGIN_DIR/$INPUT_OUTPUT/PKGBUILD" "$HOME/package/PKGBUILD"
 
 echo "Changing directory from $PWD to $HOME/package"
-cd $HOME/package
+cd "$HOME/package"
 
 echo "::endgroup::Setup"
 

@@ -62,7 +62,7 @@ jobs:
             --env INPUT_PACKAGE_NAME="test_proyect" \
             --env INPUT_PROYECT_PATH="test_proyect" \
             --env INPUT_SSH_PRIVATE_KEY="" \
-            --env INPUT_TEST_PKGBUILT="false" \
+            --env INPUT_TEST_PKGBUILD="false" \
             --env INPUT_COMMIT_MESSAGE="Bump %FILENAME% to %VERSION%" \
             --rm ${{ env.TEST_TAG }}
 
